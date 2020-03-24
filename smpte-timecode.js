@@ -19,8 +19,9 @@
         if (typeof frameRate === 'undefined') this.frameRate = 29.97;
         else if (typeof frameRate === 'number' && frameRate>0) this.frameRate = frameRate;
         else throw new Error('Number expected as framerate');
-        if (this.frameRate!==23.976 && this.frameRate!==24 && this.frameRate!==25 && this.frameRate!==29.97 && this.frameRate!==30 &&
-            this.frameRate!==50 && this.frameRate!==59.94 && this.frameRate!==60
+        if (this.frameRate!==12 && this.frameRate!==15 && this.frameRate!==23.976 && this.frameRate!==24 && this.frameRate!==25 &&
+        	this.frameRate!==29.97 && this.frameRate!==30 && this.frameRate!==48 && this.frameRate!==50 && this.frameRate!==59.94 && this.frameRate!==60 &&
+        	this.frameRate!==75 &&  this.frameRate!==96 && this.frameRate!==100 && this.frameRate!==120 && this.frameRate!== 240
         ) throw new Error('Unsupported framerate');
 
         // If we are passed dropFrame, we need to use it
@@ -34,9 +35,9 @@
         }
         else if (typeof timeCode === 'string') {
             // pick it apart
-            var parts = timeCode.match('^([012]\\d):(\\d\\d):(\\d\\d)(:|;|\\.)(\\d\\d)$');
-            if (!parts) throw new Error("Timecode string expected as HH:MM:SS:FF or HH:MM:SS;FF");
-            this.hours = parseInt(parts[1]);
+            var parts = timeCode.match('^(?<HH>[0-9]{2}):(?<MM>[0-9]{2}):(?<SS>[0-9]{2})(:|;)(?<FF>[0-9]{2,3})$');
+            if (!parts) throw new Error("Timecode string expected as HH:MM:SS:FF or HH:MM:SS;FF - Frame can be FF or FFF");
+            this.hours = parseInt(parts['MM']);
             this.minutes = parseInt(parts[2]);
             this.seconds = parseInt(parts[3]);
             // do not override input parameters
